@@ -15,7 +15,6 @@ class SVM4342 ():
     # contain n rows, where n is the number of examples.
     # y should correspondingly be an n-vector of labels (-1 or +1).
     def fit (self, X, y):
-        # TODO change these -- they should be matrices or vectors
         # let w' be the weights including bias term, X1 be data with 1s appended
         # minimize 1/2 w•w 
         #   or 1/2 w' P w'
@@ -33,7 +32,6 @@ class SVM4342 ():
         G = -np.diag(y).dot(X1) # need to multiply y componentwise with X1 w', so G is weird
         h = -np.ones(n)
 
-        # Solve -- if the variables above are defined correctly, you can call this as-is:
         # minimizes 1/2 (xT P x) + q•x
         #   so P removes bias terms from w', q = 0
         # subject to G x ≤ h (componentwise ≤)
@@ -47,7 +45,7 @@ class SVM4342 ():
 
     # Given a 2-D matrix of examples X, output a vector of predicted class labels
     def predict (self, X):
-        return (self.w.dot(X.T) + self.b > 0) * 2 - 1
+        return np.sign(self.w.dot(X.T) + self.b)
 
 def test1 ():
     # Set up toy problem
