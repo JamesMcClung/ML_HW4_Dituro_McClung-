@@ -1,6 +1,6 @@
 *.csv
 *.log
-*. aux
+*.aux
 *.fdb_latexmk
 *.fls
 *.synctex.gz
