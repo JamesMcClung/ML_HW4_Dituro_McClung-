@@ -6,11 +6,11 @@ import math as m
 
 # Define the number of batches and iterations. This DRASTICALLY affects runtime.
 BATCHC = 250
-ITERSIZE = 20
+ITERSIZE = 250 # It is recommended that ITERSIZE << BATCHC
 
 # Load data
 d = pandas.read_csv('train.csv')
-y = np.array(d.target)  # Labels
+y = np.array(d.target)      # Labels
 X = np.array(d.iloc[:,2:])  # Features
 
 # Randomize the order of the Labels and Features together
