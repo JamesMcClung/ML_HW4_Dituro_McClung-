@@ -4,16 +4,9 @@ import numpy as np
 import pandas
 import math as m
 
-# Define the number of batches. This DRASTICALLY affects runtime.
-# Projections:
-#  BC   T
-#  -------
-#  250| 4h
-#  100| 6h
-# 1000| 5.5h
-#   10| Indefinite
-
-BATCHC = 400
+# Define the number of batches and iterations. This DRASTICALLY affects runtime.
+BATCHC = 250
+ITERSIZE = 20
 
 # Load data
 d = pandas.read_csv('train.csv')
@@ -39,28 +32,25 @@ yhatP = yhatL
 svmL = sklearn.svm.SVC(kernel = 'linear', C = 1e15)
 svmP = sklearn.svm.SVC(C = 1e15, kernel = 'poly', degree = 3)
 
-for x in range(0,BATCHC):
+for x in range(0,ITERSIZE):
 
     # Linear SVM
-    print(f'Got Here L: {x}')
+    print(f'Iteration: {x}')
     svmL.fit(X = Xsp[x], y = ysp[x])                    # Fit to the x-th batch
     yhatL = yhatL + svmL.decision_function(X = Xte)     # Test on the x-th batch's predictions and add to yhat
 
     # Non-linear SVM (polynomial kernel)
-    print(f'Got Here P: {x}')
     svmP.fit(X = Xsp[x], y = ysp[x])                    # Fit to the x-th batch
     yhatP = yhatP + svmP.decision_function(X = Xte)     # Test on the x-th batch's predictions and add to yhat
 
-# Divides both yhats element-wise by BATCHC, 
+# Divides both yhats element-wise by ITERC, 
 # thus taking the average Prediction over the 
-# batch size.
-print('Got to divide')
-yhatL, yhatP = np.divide(yhatL, BATCHC), np.divide(yhatP, BATCHC)
+# number of iterations.
+yhatL, yhatP = np.divide(yhatL, ITERSIZE), np.divide(yhatP, ITERSIZE)
 
 # Compute AUC
-print('Got to acu')
 aucL = sklearn.metrics.roc_auc_score(yte, yhatL)
 aucP = sklearn.metrics.roc_auc_score(yte, yhatP)
 
-print(f'acu1: {auc1}')
-print(f'acu2: {auc2}')
+print(f'acuL: {aucL}')
+print(f'acuP: {aucP}')
