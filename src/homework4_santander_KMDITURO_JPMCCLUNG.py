@@ -1,3 +1,7 @@
+# with batchc = itersize = 250 (takes a long time):
+# acuL: 0.8207307431079025
+# acuP: 0.805964512321145
+
 import sklearn.svm
 import sklearn.metrics
 import numpy as np
@@ -18,8 +22,9 @@ p = np.random.permutation(X.shape[0])
 Xp, yp = X[p], y[p]
 
 # Partition the data into Training data and Testing data
-Xtr, ytr = Xp[0:m.floor((X.shape[0])/2)], yp[0:m.floor((X.shape[0])/2)]
-Xte, yte = Xp[m.floor((X.shape[0])/2):], yp[m.floor((X.shape[0])/2):]
+part = m.floor((X.shape[0])/2)
+Xtr, ytr = Xp[:part], yp[:part]
+Xte, yte = Xp[part:], yp[part:]
 
 # Split the training data into BATCHC partitions
 Xsp, ysp = np.split(Xtr,BATCHC), np.split(ytr, BATCHC)
